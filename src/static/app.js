@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
               }).join("")}
             </ul>
           </div>`;
-        }
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
