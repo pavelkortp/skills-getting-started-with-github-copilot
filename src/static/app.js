@@ -4,6 +4,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+
+      // Функція для видалення учасника
+    function unregisterParticipant(name) {
+        // Видаляємо учасника з масиву
+        participants = participants.filter(p => p !== name);
+        // Оновлюємо відображення списку
+        renderParticipants();
+        // TODO: Якщо потрібно, додайте запит до бекенду для видалення на сервері
+    }
+  
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -20,11 +30,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Create participants list HTML
+        let participantsHTML = `
+          <div class="participants-section">
+            <strong>Participants:</strong>
+            <ul class="participants-list" style="list-style: none; padding: 0;">
+              ${details.participants.map((participant, idx) => {
+                return `
+                  <li style="display: flex; align-items: center; margin-bottom: 4px;">
+                    <span>${participant}</span>
+                    <button style="margin-left: 8px; background: none; border: none; cursor: pointer; font-size: 1em;" title="Видалити" onclick="unregisterParticipant('${participant}')">🗑️</button>
+                  </li>
+                `;
+              }).join("")}
+            </ul>
+          </div>`;
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          ${participantsHTML}
         `;
 
         activitiesList.appendChild(activityCard);
